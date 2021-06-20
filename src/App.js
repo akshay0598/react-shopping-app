@@ -1,6 +1,18 @@
 // Hello feature -1
 import './index.css';
-function App() {
+import data from './data.json';
+import { Component } from 'react';
+import Products from './components/Products';
+class App  extends Component {
+  constructor(){
+    super();
+    this.state = {
+      products:data.products,
+      size:"",
+      sort:""
+    }
+  }
+  render(){
   return(
 
   <div className="grid-container">
@@ -8,13 +20,21 @@ function App() {
   <a href="/">React Shopping Cart</a>
 </header>
 <main>
-  Product List
+  <div className="content">
+    <div className="main">
+   <Products products = {this.state.products}/>
+    </div>
+    <div className="sidebar">
+Cart Items
+    </div>
+  </div>
 </main>
 <footer>
   All rights are reserved
 </footer>
   </div>
   );
+}
 }
 
 export default App;
