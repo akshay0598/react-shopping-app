@@ -44,6 +44,9 @@ class App  extends Component {
     localStorage.setItem("cartItems",JSON.stringify(cartItems.filter(x => x._id !==item._id)));
 
   }
+  createOrder = order => {
+    alert("Need to save order for "+order.name);
+  }
   filterProducts = (event) => {
  if(event.target.value === ""){
    this.setState({
@@ -88,7 +91,7 @@ class App  extends Component {
    <Products products = {this.state.products} addToCart = {this.addToCart.bind(this)}/>
     </div>
     <div className="sidebar">
-<Cart cartItems={this.state.cartItems} removeFromCart = {this.removeFromCart}/>
+<Cart cartItems={this.state.cartItems} removeFromCart = {this.removeFromCart} createOrder={this.createOrder}/>
     </div>
   </div>
 </main>

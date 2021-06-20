@@ -2,6 +2,32 @@ import React, { Component } from 'react'
 import formatCurrency from '../util';
 
 export default class Cart extends Component {
+    constructor(props){
+        super(props);
+        this.state = 
+        {
+            name:"",
+            address:"",
+            email:"",
+            showCheckout:false,
+        }
+    }
+    handleInput = e => {
+        this.setState({
+            [e.target.name] : e.target.value
+        });
+        console.log(this.state.name,this.state.address);
+    }
+    createOrder = e => {
+        e.preventDefault();
+        const order = {
+            name:this.state.name,
+            address:this.state.address,
+            email:this.state.email,
+            cartItems:this.props.cartItems
+        };
+        this.props.createOrder(order);
+    }
     render() {
         const {cartItems} = this.props; 
         return (
@@ -36,9 +62,35 @@ export default class Cart extends Component {
                         Total:{"  "}
                         { formatCurrency(cartItems.reduce((a,c) => a + (c.price*c.count),0))}
                     </div>
-                    <button className="button primary">Proceed</button>
+                    <button onClick = {() => {this.setState({showCheckout:true})}} className="button primary">Proceed</button>
                     </div> :""}
                 </div>
+                {this.state.showCheckout ? (
+                    <div className="cart">
+                        <form onSubmit = {this.createOrder}>
+                         <ul className="form-container">
+                             <li>
+                                 <label id="email">Email</label>
+                                 <input type="email" required onChange = {this.handleInput} name="email" id="email"/>
+                             </li>
+                             <li>
+                                 <label id="name">Name</label>
+                                 <input type="text" required onChange = {this.handleInput} name="name" id="name"/>
+                             </li>
+                             <li>
+                                 <label id="address">Address</label>
+                                 <input type="text" required onChange = {this.handleInput} name="address" id="address"/>
+                             </li>
+
+                             <li>
+                                 <button type="submit" className="button primary">Checout</button>
+                                 </li>
+
+                         </ul>
+                        </form>
+                        </div>
+
+                ):""}
             </div>
         )
     }
