@@ -4,14 +4,42 @@ import data from './data.json';
 import { Component } from 'react';
 import Filter from './components/Filter';
 import Products from './components/Products';
+import Cart from './components/Cart';
 class App  extends Component {
   constructor(){
     super();
     this.state = {
       products:data.products,
       size:"",
-      sort:""
+      sort:"",
+      cartItems:[]
     }
+  }
+  addToCart(product){
+    let cartItems  = this.state.cartItems.slice();
+    let alreadyInCart = false;
+    cartItems.forEach((item) => {
+      if(item._id === product._id){
+        item.count++;
+        alreadyInCart = true;
+      }
+    });
+      if(!alreadyInCart){
+        cartItems.push({...product,count:1});
+      }
+      this.setState({
+        cartItems:cartItems
+      })
+
+    
+    console.log(cartItems);
+  }
+  removeFromCart = (item) => {
+    const cartItems = this.state.cartItems.slice();
+    
+    this.setState({
+      cartItems:cartItems.filter(x => x._id !==item._id)
+    })
   }
   filterProducts = (event) => {
  if(event.target.value === ""){
@@ -54,10 +82,10 @@ class App  extends Component {
     <div className="main">
       <Filter count={this.state.products.length} size={this.state.size} sort = {this.state.sort} filterProducts = {this.filterProducts}
       sortProducts = {this.sortProducts}/>
-   <Products products = {this.state.products}/>
+   <Products products = {this.state.products} addToCart = {this.addToCart.bind(this)}/>
     </div>
     <div className="sidebar">
-Cart Items
+<Cart cartItems={this.state.cartItems} removeFromCart = {this.removeFromCart}/>
     </div>
   </div>
 </main>
